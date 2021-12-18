@@ -1,6 +1,7 @@
 import os
 import mysql.connector
 from dotenv import load_dotenv
+from mysql.connector.errors import DatabaseError
 
 load_dotenv()
 MYSQL_HOST = os.getenv('MYSQL_HOST')
@@ -40,12 +41,16 @@ def find_one(query, params):
 
 
 def add_one(query, params):
-    params = clean_params(params)
-    cursor = cnx.cursor()
-    cursor.execute(query, params)
-    created_id = cursor.lastrowid
-    cnx.commit()
-    cursor.close()
+    created_id = None
+    try:
+        params = clean_params(params)
+        cursor = cnx.cursor()
+        cursor.execute(query, params)
+        created_id = cursor.lastrowid
+        cnx.commit()
+        cursor.close()
+    except DatabaseError:
+        print(f'WARNING: could not add {params}')
     return created_id
 
 
