@@ -1,0 +1,12 @@
+# editor settings
+.idea/
+
+# python library
+venv/
+
+# raw data
+data/
+
+# db data
+db/
+
