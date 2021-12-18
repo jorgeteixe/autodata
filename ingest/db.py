@@ -5,14 +5,14 @@ from dotenv import load_dotenv
 load_dotenv()
 MYSQL_HOST = os.getenv('MYSQL_HOST')
 MYSQL_USER = os.getenv('MYSQL_USER')
-MYSQL_PASS = os.getenv('MYSQL_PASS')
-MYSQL_DB = os.getenv('MYSQL_DB')
+MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
+MYSQL_DATABASE = os.getenv('MYSQL_DATABASE')
 
 cnx = mysql.connector.connect(
     host=MYSQL_HOST,
     user=MYSQL_USER,
-    password=MYSQL_PASS,
-    database=MYSQL_DB
+    password=MYSQL_PASSWORD,
+    database=MYSQL_DATABASE
 )
 
 

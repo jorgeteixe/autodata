@@ -11,10 +11,10 @@ services:
       - ./create.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: autodata
-      MYSQL_USER: autodata
-      MYSQL_PASSWORD: autodata
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?err}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?err}
+      MYSQL_USER: ${MYSQL_USER:?err}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?err}
     networks:
       - autodata
     healthcheck:
@@ -32,7 +32,7 @@ services:
       - '8080:80'
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?err}
     networks:
       - autodata
   # ingest
@@ -47,9 +47,9 @@ services:
     restart: 'no'
     environment:
       MYSQL_HOST: db
-      MYSQL_USER: autodata
-      MYSQL_PASS: autodata
-      MYSQL_DB:  autodata
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?err}
+      MYSQL_USER: ${MYSQL_USER:?err}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?err}
     networks:
       - autodata
 
