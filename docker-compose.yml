@@ -10,8 +10,6 @@ services:
       - db_data:/var/lib/mysql
       - ./create.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped
-    ports:
-      - '3306:3306'
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: autodata
@@ -19,6 +17,10 @@ services:
       MYSQL_PASSWORD: autodata
     networks:
       - autodata
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
   # phpmyadmin
   phpmyadmin:
     container_name: autodata_phpmyadmin
@@ -31,6 +33,23 @@ services:
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: password
+    networks:
+      - autodata
+  # ingest
+  ingest:
+    container_name: autodata_ingest
+    depends_on:
+      - db
+    build:
+      context: ingest/
+    volumes:
+      - ./ingest/data:/usr/src/data
+    restart: 'no'
+    environment:
+      MYSQL_HOST: db
+      MYSQL_USER: autodata
+      MYSQL_PASS: autodata
+      MYSQL_DB:  autodata
     networks:
       - autodata
 
