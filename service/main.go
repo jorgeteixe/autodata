@@ -19,23 +19,30 @@ func main() {
 	permc := controllers.NewPermisosController()
 	tec := controllers.NewTiposExamenController()
 	sc := controllers.NewSeccionesController()
-	rc := controllers.NewReportsController()
+	// rc := controllers.NewReportsController()
 
 	r.HandleFunc("/ready", gc.ReadyHandler).Methods("GET")
+
 	r.HandleFunc("/provincias", provc.GetProvinciasHandler).Methods("GET")
 	r.HandleFunc("/provincias/{id}", provc.GetProvinciaHandler).Methods("GET")
+
 	r.HandleFunc("/centros-examen", cec.GetCentrosExamenHandler).Methods("GET")
 	r.HandleFunc("/centros-examen/{id}", cec.GetCentroExamenHandler).Methods("GET")
+
 	r.HandleFunc("/autoescuelas", ac.GetAutoescuelasHandler).Methods("GET")
 	r.HandleFunc("/autoescuelas/{id}", ac.GetAutoescuelaHandler).Methods("GET")
+
 	r.HandleFunc("/secciones", sc.GetSeccionesHandler).Methods("GET")
 	r.HandleFunc("/secciones/{id}", sc.GetSeccionHandler).Methods("GET")
+
 	r.HandleFunc("/permisos", permc.GetPermisosHandler).Methods("GET")
 	r.HandleFunc("/permisos/{id}", permc.GetPermisoHandler).Methods("GET")
+
 	r.HandleFunc("/tipos-examen", tec.GetTiposExamenHandler).Methods("GET")
 	r.HandleFunc("/tipos-examen/{id}", tec.GetTipoExamenHandler).Methods("GET")
-	r.HandleFunc("/reports", rc.GetReportsHandler).Methods("GET")
-	r.HandleFunc("/reports/{id}", rc.GetReportHandler).Methods("GET")
+
+	// r.HandleFunc("/reports", rc.GetReportsHandler).Methods("GET")
+	// r.HandleFunc("/reports/{id}", rc.GetReportHandler).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8090", logRequest(r)))
 }
 
@@ -71,7 +78,6 @@ func requestGetRemoteAddress(r *http.Request) string {
 		for i, p := range parts {
 			parts[i] = strings.TrimSpace(p)
 		}
-		// TODO: should return first non-local address
 		return strings.Join(parts, ",")
 	}
 	return hdrRealIP
