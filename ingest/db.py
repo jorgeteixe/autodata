@@ -182,3 +182,15 @@ def create_reports(records):
         id_permiso = find_permiso(per)[0]
         id_tipo = find_tipo_examen(tipo)[0]
         add_report(id_seccion, id_centro, id_permiso, id_tipo, mes, anyo, a, a1, a2, a34, a5m, na)
+
+
+def set_read_file(filename):
+    query = 'INSERT INTO `report_files` (`nombre`, `leido`) VALUES (%s, %s);'
+    params = (filename, 1)
+    return add_one(query, params)
+
+
+def get_read_file(filename):
+    query = 'SELECT `nombre`, `leido` FROM `report_files` WHERE `nombre` = %s'
+    params = (filename, )
+    return find_one(query, params)

@@ -9,8 +9,13 @@ DATA_DIR = '/usr/src/data'
 def main():
     print(f'starting ingest')
     for filename in os.listdir(DATA_DIR):
-        print(f'started to ingest file: {filename}')
-        import_to_db(os.path.join(DATA_DIR, filename))
+        if db.get_read_file(filename) is None:
+            print(f'started to ingest file: {filename}')
+            import_to_db(os.path.join(DATA_DIR, filename))
+            db.set_read_file(filename)
+        else:
+            print(f'skipped file: {filename}')
+
     db.close_cnx()
     print(f'finished ingest')
 

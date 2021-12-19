@@ -63,3 +63,8 @@ CREATE TABLE IF NOT EXISTS `report` (
 
   UNIQUE INDEX `uniq_report` (`seccion`, `centro_examen`, `permiso`, `tipo_examen`, `mes`, `anyo`)
 ) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `report_files` (
+  `nombre` varchar(255),
+  `leido` boolean default 0
+) ENGINE=InnoDB;
