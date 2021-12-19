@@ -72,7 +72,7 @@ func requestGetRemoteAddress(r *http.Request) string {
 			parts[i] = strings.TrimSpace(p)
 		}
 		// TODO: should return first non-local address
-		return parts[0]
+		return strings.Join(parts, ",")
 	}
 	return hdrRealIP
 }

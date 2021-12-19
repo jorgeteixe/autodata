@@ -52,6 +52,23 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:?err}
     networks:
       - autodata
+  # service
+  service:
+    container_name: autodata_service
+    depends_on:
+      - db
+    build:
+      context: service/
+    ports:
+      - "80:8090"
+    restart: unless-stopped
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?err}
+      MYSQL_USER: ${MYSQL_USER:?err}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?err}
+    networks:
+      - autodata
 
 networks:
   autodata:
