@@ -12,6 +12,8 @@ import (
 func main() {
 	r := mux.NewRouter()
 
+	r.StrictSlash(true)
+
 	gc := controllers.NewGeneralController()
 	provc := controllers.NewProvinciasController()
 	ac := controllers.NewAutoescuelasController()
