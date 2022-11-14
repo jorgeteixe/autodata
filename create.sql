@@ -10,9 +10,9 @@ CREATE TABLE IF NOT EXISTS `provincia` (
 CREATE TABLE IF NOT EXISTS `centro_examen` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(255),
-  `provincia` int,
-
-  FOREIGN KEY (`provincia`) REFERENCES `provincia` (`id`)
+  `id_provincia` int,
+  
+  FOREIGN KEY (`id_provincia`) REFERENCES `provincia` (`id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `autoescuela` (
@@ -24,11 +24,10 @@ CREATE TABLE IF NOT EXISTS `autoescuela` (
 CREATE TABLE IF NOT EXISTS `seccion` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `codigo` int,
-  `autoescuela` int,
+  `id_autoescuela` int,
 
-  FOREIGN KEY (`autoescuela`) REFERENCES `autoescuela` (`id`),
-
-  UNIQUE INDEX `uniq_seccion` (`codigo`, `autoescuela`)
+  FOREIGN KEY (`id_autoescuela`) REFERENCES `autoescuela` (`id`),
+  UNIQUE INDEX `uniq_seccion` (`codigo`, `id_autoescuela`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `permiso` (
@@ -41,14 +40,19 @@ CREATE TABLE IF NOT EXISTS `tipo_examen` (
   `nombre` varchar(255)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS `fecha` (
+  `id` int PRIMARY KEY AUTO_INCREMENT,
+  `mes` int,
+  `anyo` int
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS `report` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `seccion` int,
   `centro_examen` int,
   `permiso` int,
   `tipo_examen` int,
-  `mes` int,
-  `anyo` int,
+  `fecha` int,
   `total_aptos` int,
   `aptos_1` int,
   `aptos_2` int,
@@ -60,11 +64,8 @@ CREATE TABLE IF NOT EXISTS `report` (
   FOREIGN KEY (`centro_examen`) REFERENCES `centro_examen` (`id`),
   FOREIGN KEY (`permiso`) REFERENCES `permiso` (`id`),
   FOREIGN KEY (`tipo_examen`) REFERENCES `tipo_examen` (`id`),
-
-  UNIQUE INDEX `uniq_report` (`seccion`, `centro_examen`, `permiso`, `tipo_examen`, `mes`, `anyo`)
+  FOREIGN KEY (`fecha`) REFERENCES `fecha` (`id`),
+  UNIQUE INDEX `uniq_report` (`seccion`, `permiso`, `tipo_examen`, `fecha`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `report_files` (
-  `nombre` varchar(255),
-  `leido` boolean default 0
-) ENGINE=InnoDB;
+
