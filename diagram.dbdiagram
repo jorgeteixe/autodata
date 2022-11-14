@@ -1,0 +1,66 @@
+Table provincia as P {
+  id int [pk, increment]
+  nombre varchar
+}
+
+Table centro_examen as CE {
+  id int [pk, increment]
+  nombre varchar
+  provincia int
+}
+
+Ref: CE.provincia > P.id
+
+Table autoescuela as AE {
+  id int [pk, increment]
+  codigo varchar
+  nombre varchar
+}
+
+Table seccion as S {
+  id int [pk, increment]
+  codigo int
+  autoescuela int
+  
+  indexes {
+    (codigo, autoescuela) [unique]
+  }
+}
+
+Ref: S.autoescuela > AE.id
+
+Table permiso as PER {
+  id int [pk, increment]
+  nombre varchar
+}
+
+Table tipo_examen as TE {
+  id int [pk, increment]
+  nombre varchar
+}
+
+Table report as R {
+  id int [pk, increment]
+  seccion int
+  centro_examen int
+  permiso int
+  tipo_examen int
+  mes int
+  anyo int
+  total_aptos int
+  aptos_1 int
+  aptos_2 int
+  aptos_3_4 int
+  aptos_5m int
+  no_aptos int
+  
+  indexes {
+    (seccion, permiso, tipo_examen, mes, anyo) [unique]
+  }
+}
+
+Ref: R.seccion > S.id
+Ref: R.centro_examen > CE.id
+Ref: R.permiso > PER.id
+Ref: R.tipo_examen > TE.id
+
