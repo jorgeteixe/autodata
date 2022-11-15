@@ -34,6 +34,8 @@ def import_to_db(file):
     db.update_tipos_examen(tipos_examen)
     permisos = df['NOMBRE_PERMISO'].unique()
     db.update_permisos(permisos)
+    fechas = df.groupby(by='MES', as_index=False)['ANYO'].apply(set)
+    db.update_fecha(fechas)
     reports = df
     db.create_reports(reports)
 

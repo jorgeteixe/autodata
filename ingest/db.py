@@ -49,8 +49,9 @@ def add_one(query, params):
         created_id = cursor.lastrowid
         cnx.commit()
         cursor.close()
-    except DatabaseError:
+    except DatabaseError as e:
         print(f'WARNING: could not add {params}')
+        print(e)
     return created_id
 
 
@@ -73,13 +74,13 @@ def update_provincias(provincias):
 
 
 def add_centro(nombre, id_provincia):
-    query = 'INSERT INTO `centro_examen` (`nombre`, `provincia`) VALUES (%s, %s);'
+    query = 'INSERT INTO `centro_examen` (`nombre`, `id_provincia`) VALUES (%s, %s);'
     params = (nombre, id_provincia)
     return add_one(query, params)
 
 
 def find_centro(nombre, id_provincia):
-    query = 'SELECT `id`, `nombre`, `provincia` FROM `centro_examen` WHERE `nombre` = %s AND `provincia` = %s;'
+    query = 'SELECT `id`, `nombre`, `id_provincia` FROM `centro_examen` WHERE `nombre` = %s AND `id_provincia` = %s;'
     params = (nombre, id_provincia)
     return find_one(query, params)
 
@@ -110,14 +111,14 @@ def update_autoescuelas(autoescuelas):
 
 
 def add_seccion(codigo, id_autoescuela):
-    query = 'INSERT INTO `seccion` (`codigo`, `autoescuela`) VALUES (%s, %s);'
+    query = 'INSERT INTO `seccion` (`codigo`, `id_autoescuela`) VALUES (%s, %s);'
     params = (codigo, id_autoescuela)
     return add_one(query, params)
 
 
 def find_seccion(codigo, id_autoescuela):
-    query = 'SELECT `id`, `codigo`, `autoescuela` ' \
-            'FROM `seccion` WHERE `codigo` = %s AND `autoescuela` = %s;'
+    query = 'SELECT `id`, `codigo`, `id_autoescuela` ' \
+            'FROM `seccion` WHERE `codigo` = %s AND `id_autoescuela` = %s;'
     params = (codigo, id_autoescuela)
     return find_one(query, params)
 
@@ -147,21 +148,20 @@ def update_tipos_examen(tipos_examen):
             add_tipo_examen(tipo)
 
 
-def add_fecha(nombre):
+def add_fecha(mes, anyo):
     query = 'INSERT INTO `fecha` (`mes`, `anyo`) VALUES (%s, %s);'
     params = (mes, anyo)
     return add_one(query, params)
 
 
-def find_fecha(nombre):
+def find_fecha(mes, anyo):
     query = 'SELECT `id`, `mes`, `anyo` FROM `fecha` WHERE `mes` = %s AND `anyo` = %s;'
     params = (mes, anyo)
     return find_one(query, params)
 
 
-def update_fecha(fecha):
-    for _,  (mes, anyo) in fecha.iterrows():
-        id, _, _ = find_fecha(fecha)
+def update_fecha(fechas): 
+    for _,  (mes, anyo) in fechas.iterrows():
         if find_fecha(mes, anyo) is None:
             add_fecha(mes, anyo)
 
@@ -185,7 +185,7 @@ def update_permisos(permisos):
 
 
 def add_report(secc, centro, per, tipo, fecha, a, a1, a2, a34, a5m, na):
-    query = "INSERT INTO `report` (`seccion`, `centro_examen`, `permiso`, `tipo_examen`, `fecha`, " \
+    query = "INSERT INTO `report` (`id_seccion`, `id_centro_examen`, `id_permiso`, `id_tipo_examen`, `id_fecha`, " \
             "`total_aptos`, `aptos_1`, `aptos_2`, `aptos_3_4`, `aptos_5m`, `no_aptos`) " \
             "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     params = (secc, centro, per, tipo, fecha, a, a1, a2, a34, a5m, na)
@@ -193,14 +193,15 @@ def add_report(secc, centro, per, tipo, fecha, a, a1, a2, a34, a5m, na):
 
 
 def create_reports(records):
-    for _, (prov, centro, auto, _, secc, fecha, tipo, per, a, a1, a2, a34, a5m, na) in records.iterrows():
+    for _, (prov, centro, auto, _, secc, mes, anyo, tipo, per, a, a1, a2, a34, a5m, na) in records.iterrows():
         id_provincia = find_provincia(prov)[0]
         id_centro = find_centro(centro, id_provincia)[0]
         id_autoescuela = find_autoescuela(auto)[0]
         id_seccion = find_seccion(secc, id_autoescuela)[0]
+        id_fecha = find_fecha(mes, anyo)[0]
         id_permiso = find_permiso(per)[0]
         id_tipo = find_tipo_examen(tipo)[0]
-        add_report(id_seccion, id_centro, id_permiso, id_tipo, fecha, a, a1, a2, a34, a5m, na)
+        add_report(id_seccion, id_centro, id_permiso, id_tipo, id_fecha, a, a1, a2, a34, a5m, na)
 
 
 def set_read_file(filename):

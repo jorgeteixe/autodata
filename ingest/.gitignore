@@ -3,6 +3,7 @@
 
 # python library
 venv/
+__pycache__/
 
 # raw data
 data/
