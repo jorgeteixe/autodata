@@ -147,6 +147,25 @@ def update_tipos_examen(tipos_examen):
             add_tipo_examen(tipo)
 
 
+def add_fecha(nombre):
+    query = 'INSERT INTO `fecha` (`mes`, `anyo`) VALUES (%s, %s);'
+    params = (mes, anyo)
+    return add_one(query, params)
+
+
+def find_fecha(nombre):
+    query = 'SELECT `id`, `mes`, `anyo` FROM `fecha` WHERE `mes` = %s AND `anyo` = %s;'
+    params = (mes, anyo)
+    return find_one(query, params)
+
+
+def update_fecha(fecha):
+    for _,  (mes, anyo) in fecha.iterrows():
+        id, _, _ = find_fecha(fecha)
+        if find_fecha(mes, anyo) is None:
+            add_fecha(mes, anyo)
+
+
 def add_permiso(nombre):
     query = 'INSERT INTO `permiso` (`nombre`) VALUES (%s);'
     params = (nombre,)
@@ -165,23 +184,23 @@ def update_permisos(permisos):
             add_permiso(permiso)
 
 
-def add_report(secc, centro, per, tipo, mes, anyo, a, a1, a2, a34, a5m, na):
-    query = "INSERT INTO `report` (`seccion`, `centro_examen`, `permiso`, `tipo_examen`, `mes`, `anyo`, " \
+def add_report(secc, centro, per, tipo, fecha, a, a1, a2, a34, a5m, na):
+    query = "INSERT INTO `report` (`seccion`, `centro_examen`, `permiso`, `tipo_examen`, `fecha`, " \
             "`total_aptos`, `aptos_1`, `aptos_2`, `aptos_3_4`, `aptos_5m`, `no_aptos`) " \
-            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    params = (secc, centro, per, tipo, mes, anyo, a, a1, a2, a34, a5m, na)
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    params = (secc, centro, per, tipo, fecha, a, a1, a2, a34, a5m, na)
     return add_one(query, params)
 
 
 def create_reports(records):
-    for _, (prov, centro, auto, _, secc, mes, anyo, tipo, per, a, a1, a2, a34, a5m, na) in records.iterrows():
+    for _, (prov, centro, auto, _, secc, fecha, tipo, per, a, a1, a2, a34, a5m, na) in records.iterrows():
         id_provincia = find_provincia(prov)[0]
         id_centro = find_centro(centro, id_provincia)[0]
         id_autoescuela = find_autoescuela(auto)[0]
         id_seccion = find_seccion(secc, id_autoescuela)[0]
         id_permiso = find_permiso(per)[0]
         id_tipo = find_tipo_examen(tipo)[0]
-        add_report(id_seccion, id_centro, id_permiso, id_tipo, mes, anyo, a, a1, a2, a34, a5m, na)
+        add_report(id_seccion, id_centro, id_permiso, id_tipo, fecha, a, a1, a2, a34, a5m, na)
 
 
 def set_read_file(filename):
