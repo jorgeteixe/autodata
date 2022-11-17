@@ -5,7 +5,7 @@ USE `autodata`;
 CREATE TABLE IF NOT EXISTS `provincia` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(255)
-) ENGINE=InnoDB;
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `centro_examen` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
@@ -13,13 +13,13 @@ CREATE TABLE IF NOT EXISTS `centro_examen` (
   `id_provincia` int,
   
   FOREIGN KEY (`id_provincia`) REFERENCES `provincia` (`id`)
-) ENGINE=InnoDB;
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `autoescuela` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `codigo` varchar(255),
   `nombre` varchar(255)
-) ENGINE=InnoDB;
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `seccion` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
@@ -29,23 +29,23 @@ CREATE TABLE IF NOT EXISTS `seccion` (
   FOREIGN KEY (`id_autoescuela`) REFERENCES `autoescuela` (`id`),
 
   UNIQUE INDEX `uniq_seccion` (`codigo`, `id_autoescuela`)
-) ENGINE=InnoDB;
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `permiso` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(255)
-) ENGINE=InnoDB;
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `tipo_examen` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `nombre` varchar(255)
-) ENGINE=InnoDB;
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `fecha` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
   `mes` int,
   `anyo` int
-) ENGINE=InnoDB;
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `report` (
   `id` int PRIMARY KEY AUTO_INCREMENT,
@@ -68,9 +68,9 @@ CREATE TABLE IF NOT EXISTS `report` (
   FOREIGN KEY (`id_fecha`) REFERENCES `fecha` (`id`),
 
   UNIQUE INDEX `uniq_report` (`id_seccion`, `id_centro_examen`, `id_permiso`, `id_tipo_examen`, `id_fecha`)
-) ENGINE=InnoDB;
+) ENGINE=MyISAM;
 
 CREATE TABLE IF NOT EXISTS `report_files` (
   `nombre` varchar(255),
   `leido` boolean default 0
-) ENGINE=InnoDB;
+) ENGINE=MyISAM;

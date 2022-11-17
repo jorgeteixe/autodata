@@ -99,6 +99,7 @@ def add_autoescuela(codigo, nombre):
 
 
 def find_autoescuela(codigo):
+    codigo = codigo.replace(" ", "")
     query = 'SELECT `id`, `codigo`, `nombre` FROM `autoescuela` WHERE `codigo` = %s;'
     params = (codigo,)
     return find_one(query, params)
@@ -106,6 +107,7 @@ def find_autoescuela(codigo):
 
 def update_autoescuelas(autoescuelas):
     for _, (codigo, nombre) in autoescuelas.iterrows():
+        codigo = codigo.replace(" ", "")
         if find_autoescuela(codigo) is None:
             add_autoescuela(codigo, nombre)
 

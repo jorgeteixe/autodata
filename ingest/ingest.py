@@ -3,7 +3,7 @@ import pandas as pd
 
 import db
 
-DATA_DIR = '/usr/src/data'
+DATA_DIR = './data'
 
 
 def main():
@@ -27,6 +27,7 @@ def import_to_db(file):
     centros = df.groupby(by='CENTRO_EXAMEN', as_index=False)['DESC_PROVINCIA'].apply(set)
     db.update_centros(centros)
     autoescuelas = df.groupby(by='CODIGO_AUTOESCUELA', as_index=False)['NOMBRE_AUTOESCUELA'].apply(set)
+    #autoescuelas['CODIGO_AUTOESCUELA'] = autoescuelas['CODIGO_AUTOESCUELA'].str.replace(" ", "")
     db.update_autoescuelas(autoescuelas)
     secciones = df.groupby(by=['CODIGO_AUTOESCUELA', 'CODIGO_SECCION'], as_index=False)['CODIGO_SECCION'].apply(set)
     db.update_secciones(secciones)
